@@ -428,7 +428,7 @@ nav {
 }
 
 /* ─── PROJETS ─── */
-#projects { padding: 6rem 5rem; }
+#projects, #stages { padding: 6rem 5rem; }
 .proj-header {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -454,6 +454,11 @@ nav {
   display: grid;
   grid-template-columns: 3fr 2fr;
   grid-template-rows: auto auto;
+  gap: 1.5rem;
+}
+.stages-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
 }
 .proj-card {
@@ -504,12 +509,106 @@ nav {
   color: var(--ink2);
   letter-spacing: 0.03em;
 }
-
-a {
-  text-decoration: none;
-  color: var(--ink2);
-}
+a { text-decoration: none; color: var(--ink2); }
 .proj-card.pink-bg .proj-tag { background: var(--rose-dark); color: white; }
+
+/* ─── GALERIE PHOTOS ─── */
+.proj-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 1.2rem;
+}
+.proj-gallery-item {
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  background: var(--warm2);
+  border: 1px solid var(--warm2);
+}
+.proj-card.pink-bg .proj-gallery-item { background: rgba(169,63,92,0.1); border-color: rgba(169,63,92,0.2); }
+.proj-gallery-item img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+.proj-gallery-item:hover img { transform: scale(1.08); }
+.proj-gallery-item .gal-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0);
+  transition: background 0.3s;
+  display: flex; align-items: center; justify-content: center;
+}
+.proj-gallery-item:hover .gal-overlay { background: rgba(0,0,0,0.22); }
+.gal-icon {
+  color: white;
+  font-size: 18px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  line-height: 1;
+}
+.proj-gallery-item:hover .gal-icon { opacity: 1; }
+
+/* placeholder quand pas d'image */
+.proj-gallery-item.placeholder {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--warm);
+  cursor: default;
+}
+.proj-card.pink-bg .proj-gallery-item.placeholder { color: var(--rose-dark); }
+
+/* ─── LIGHTBOX ─── */
+#lightbox {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(26,21,16,0.92);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+  backdrop-filter: blur(6px);
+}
+#lightbox.open { display: flex; }
+#lightbox img {
+  max-width: 88vw;
+  max-height: 88vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  animation: lbZoom 0.28s cubic-bezier(0.34,1.56,0.64,1);
+  cursor: default;
+}
+#lb-close {
+  position: fixed; top: 1.5rem; right: 2rem;
+  color: var(--rose);
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 10001;
+  opacity: 0.8;
+  transition: opacity 0.2s, transform 0.2s;
+  font-weight: 300;
+}
+#lb-close:hover { opacity: 1; transform: rotate(90deg); }
+#lb-caption {
+  position: fixed; bottom: 2rem; left: 50%;
+  transform: translateX(-50%);
+  color: var(--warm);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+@keyframes lbZoom {
+  from { transform: scale(0.82); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
 
 /* ─── CONTACT ─── */
 #contact {
@@ -626,9 +725,10 @@ footer {
   #about { grid-template-columns: 1fr; }
   .about-sidebar { display: none; }
   .about-content { padding: 3rem 2rem; }
-  #skills, #experience, #projects, #contact { padding: 4rem 1.5rem; }
+  #skills, #experience, #projects, #stages, #contact { padding: 4rem 1.5rem; }
   .exp-grid { grid-template-columns: 1fr; }
   .proj-masonry { grid-template-columns: 1fr; }
+  .stages-grid { grid-template-columns: 1fr; }
   .proj-card.tall { grid-row: auto; }
   #contact { grid-template-columns: 1fr; gap: 3rem; }
   footer { padding: 1.5rem 2rem; flex-direction: column; gap: 0.5rem; text-align: center; }
@@ -636,12 +736,20 @@ footer {
   nav { padding: 1.2rem 1.5rem; }
   .skill-row { grid-template-columns: 1fr 1fr; }
   .sk-lvl { display: none; }
+  .proj-gallery { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
 </head>
 <body>
 
 <div class="cur" id="cur"></div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="lbClose(event)">
+  <span id="lb-close" onclick="lbCloseAll()">&times;</span>
+  <img id="lb-img" src="" alt="">
+  <div id="lb-caption"></div>
+</div>
 
 <!-- NAV -->
 <nav>
@@ -660,7 +768,7 @@ footer {
 <section id="hero">
   <div class="hero-left">
     <div class="hero-eyebrow"></div>
-    <h1 class="hero-h1">Admnistration<br>système<em></em><br>&amp; Réseaux</h1>
+    <h1 class="hero-h1">Administration<br>système<em></em><br>&amp; Réseaux</h1>
     <p class="hero-desc">Je suis à la recherche d'une opportunité d'alternance en tant qu'administratrice système et réseaux ou technicienne en support informatique.</p>
   </div>
   <div class="hero-right">
@@ -682,7 +790,6 @@ footer {
     <span class="marquee-item">NRPE</span><span class="marquee-sep">·</span>
     <span class="marquee-item">VMware</span><span class="marquee-sep">·</span>
     <span class="marquee-item">Kali Linux</span><span class="marquee-sep">·</span>
-    <!-- repeat for loop -->
     <span class="marquee-item">pfSense</span><span class="marquee-sep">·</span>
     <span class="marquee-item">OpenVPN</span><span class="marquee-sep">·</span>
     <span class="marquee-item">Nagios</span><span class="marquee-sep">·</span>
@@ -705,7 +812,7 @@ footer {
   </div>
   <div class="about-content">
     <div class="section-tag reveal">01 — À propos</div>
-    <h2 class="reveal">Passionnée<br>d'<em>infrastructure</em><br>& de réseaux.</h2>
+    <h2 class="reveal">Passionnée<br>d'<em>infrastructure</em><br>&amp; de réseaux.</h2>
     <p class="reveal">Je suis <strong>étudiante en BTS SIO option SISR</strong> au Lycée Mathias de Chalon-sur-Saône. J'ai effectué deux stages au <strong>Centre Hospitalier William Morey</strong> en tant que technicienne support, découvrant les enjeux IT en milieu hospitalier exigeant.</p>
     <p class="reveal">Mon quotidien : configurer des VPN SSL, déployer des solutions de supervision, administrer des serveurs Windows et Linux, et résoudre des incidents réseau complexes.</p>
     <div class="facts-row reveal">
@@ -724,7 +831,7 @@ footer {
   </div>
   <div class="skills-list">
     <div class="skill-row reveal">
-      <div class="sk-name">Réseau & Sécurité</div>
+      <div class="sk-name">Réseau &amp; Sécurité</div>
       <div class="sk-tags">
         <span class="sk-tag pink">pfSense</span>
         <span class="sk-tag pink">OpenVPN</span>
@@ -769,7 +876,7 @@ footer {
       <div class="sk-lvl"><div class="lvl-dot on"></div><div class="lvl-dot on"></div><div class="lvl-dot on"></div><div class="lvl-dot"></div><div class="lvl-dot"></div></div>
     </div>
     <div class="skill-row reveal">
-      <div class="sk-name">Support & Helpdesk</div>
+      <div class="sk-name">Support &amp; Helpdesk</div>
       <div class="sk-tags">
         <span class="sk-tag pink">Support N1/N2/N3</span>
         <span class="sk-tag">GLPI</span>
@@ -833,7 +940,7 @@ footer {
   </div>
 </section>
 
-<!-- PROJETS -->
+<!-- PROJETS BTS -->
 <section id="projects">
   <div class="proj-header">
     <div>
@@ -843,12 +950,24 @@ footer {
     <p class="reveal">Des projets concrets menés dans le cadre du BTS SIO, alliant théorie, pratique en infrastructure réseau et développement web.</p>
   </div>
   <div class="proj-masonry">
-    
+
     <div class="proj-card tall reveal">
       <div class="proj-num">01</div>
       <div class="proj-title">InfoTools</div>
-      <p class="proj-desc">Le but de ce projet était de créer une infrastructure compléte afin d'héberger les solutions logicielles de nos clients.</p>
-      <div class="proj-stack">
+      <p class="proj-desc">Infrastructure complète pour héberger les solutions logicielles de nos clients : AD, messagerie, supervision, proxy, VPN, GLPI et serveur web.</p>
+      <div class="proj-gallery">
+        <!-- Remplace les src par tes vraies captures d'écran -->
+        <div class="proj-gallery-item placeholder">Photo 1</div>
+        <div class="proj-gallery-item placeholder">Photo 2</div>
+        <div class="proj-gallery-item placeholder">Photo 3</div>
+        <!-- Exemple avec image :
+        <div class="proj-gallery-item" onclick="lbOpen('captures/nagios-dashboard.png','InfoTools — Nagios')">
+          <img src="captures/nagios-dashboard.png" alt="Dashboard Nagios">
+          <div class="gal-overlay"><span class="gal-icon">+</span></div>
+        </div>
+        -->
+      </div>
+      <div class="proj-stack" style="margin-top:1.2rem;">
         <span class="proj-tag"><a href="infotools-sujet.pdf">Sujet</a></span>
         <span class="proj-tag"><a href="ad.pdf">Active Directory</a></span>
         <span class="proj-tag"><a href="pfsense.pdf">Pfsense</a></span>
@@ -863,62 +982,80 @@ footer {
       </div>
     </div>
 
-
-
     <div class="proj-card pink-bg reveal">
       <div class="proj-num">02</div>
       <div class="proj-title">HAProxy</div>
-      <p class="proj-desc">Mise en place d’un serveur HAProxy pour répartir le trafic entre plusieurs serveurs web et garantir la haute disponibilité des services réseau de l’entreprise.</p>
-      <div class="proj-stack">
+      <p class="proj-desc">Mise en place d'un load balancer pour répartir le trafic entre plusieurs serveurs web et garantir la haute disponibilité.</p>
+      <div class="proj-gallery">
+        <div class="proj-gallery-item placeholder">Photo 1</div>
+        <div class="proj-gallery-item placeholder">Photo 2</div>
+        <div class="proj-gallery-item placeholder">Photo 3</div>
+      </div>
+      <div class="proj-stack" style="margin-top:1.2rem;">
         <span class="proj-tag"><a href="haproxy-sujet.pdf">Sujet</a></span>
         <span class="proj-tag"><a href="haproxy.pdf">HAProxy</a></span>
         <span class="proj-tag"><a href="srvweb1.pdf">SrvWeb 1</a></span>
         <span class="proj-tag"><a href="srvweb2.pdf">SrvWeb 2</a></span>
-        <span class="proj-tag"><a href="srvbdd.pdf">SrvBDD</a></span>
         <span class="proj-tag"><a href="pfsense.pdf">Pfsense</a></span>
       </div>
     </div>
 
-
     <div class="proj-card tall reveal">
       <div class="proj-num">03</div>
       <div class="proj-title">Gestion des formations</div>
-      <p class="proj-desc">L'objectif est de mettre en pratique les compétences acquises en développement web et la gestion de bases de données.</p>
-      <div class="proj-stack">
+      <p class="proj-desc">Application web de gestion des formations avec base de données, maquettes Figma et documentation complète.</p>
+      <div class="proj-gallery">
+        <div class="proj-gallery-item placeholder">Photo 1</div>
+        <div class="proj-gallery-item placeholder">Photo 2</div>
+        <div class="proj-gallery-item placeholder">Photo 3</div>
+      </div>
+      <div class="proj-stack" style="margin-top:1.2rem;">
         <span class="proj-tag"><a href="gestionformation-sujet.pdf">Sujet</a></span>
         <span class="proj-tag"><a href="documentation.pdf">Documentation</a></span>
         <span class="proj-tag"><a href="figma.pdf">Maquette</a></span>
       </div>
     </div>
-    
 
     <div class="proj-card reveal">
       <div class="proj-num">04</div>
       <div class="proj-title">Administration Windows Server</div>
       <p class="proj-desc">Lab d'administration en VM : gestion AD, GPO, utilisateurs, optimisation disque et sécurité.</p>
-      <div class="proj-stack">
+      <div class="proj-gallery">
+        <div class="proj-gallery-item placeholder">Photo 1</div>
+        <div class="proj-gallery-item placeholder">Photo 2</div>
+        <div class="proj-gallery-item placeholder">Photo 3</div>
+      </div>
+      <div class="proj-stack" style="margin-top:0.8rem;">
         <span class="proj-tag">Windows Server</span>
         <span class="proj-tag">Active Directory</span>
         <span class="proj-tag">Hyper-V</span>
       </div>
     </div>
+
   </div>
 </section>
 
-<!-- CONTACT -->
-<section id="projects">
+<!-- PROJETS STAGES -->
+<section id="stages" style="background: var(--cream2);">
   <div class="proj-header">
     <div>
-      <div class="section-tag reveal">04 — Projets</div>
+      <div class="section-tag reveal">04 — Stages</div>
       <h2 class="reveal">Réalisations <em>stages</em></h2>
     </div>
-    <p class="reveal">Des projets concrets menés dans le cadre d'un stage au CHWM.</p>
+    <p class="reveal">Des projets concrets menés dans le cadre de mes stages au CHWM.</p>
   </div>
-   <div class="proj-card tall reveal">
+  <div class="stages-grid">
+
+    <div class="proj-card reveal">
       <div class="proj-num">01</div>
       <div class="proj-title">Support Informatique</div>
-      <p class="proj-desc">Le but de ce projet était de créer une infrastructure compléte afin d'héberger les solutions logicielles de nos clients.</p>
-      <div class="proj-stack">
+      <p class="proj-desc">Gestion des tickets, support utilisateurs N1/N2/N3, déploiement de postes et résolution d'incidents en environnement hospitalier.</p>
+      <div class="proj-gallery">
+        <div class="proj-gallery-item placeholder">Photo 1</div>
+        <div class="proj-gallery-item placeholder">Photo 2</div>
+        <div class="proj-gallery-item placeholder">Photo 3</div>
+      </div>
+      <div class="proj-stack" style="margin-top:1.2rem;">
         <span class="proj-tag"><a href="support.pdf">Documentation</a></span>
       </div>
     </div>
@@ -926,29 +1063,85 @@ footer {
     <div class="proj-card pink-bg reveal">
       <div class="proj-num">02</div>
       <div class="proj-title">Test Fluke</div>
-      <p class="proj-desc">Mise en place d’un serveur HAProxy pour répartir le trafic entre plusieurs serveurs web et garantir la haute disponibilité des services réseau de l’entreprise.</p>
-      <div class="proj-stack">
+      <p class="proj-desc">Tests de câblage réseau avec l'outil Fluke, vérification des prises RJ45 et certification des installations réseau du CHWM.</p>
+      <div class="proj-gallery">
+        <div class="proj-gallery-item placeholder">Photo 1</div>
+        <div class="proj-gallery-item placeholder">Photo 2</div>
+        <div class="proj-gallery-item placeholder">Photo 3</div>
+      </div>
+      <div class="proj-stack" style="margin-top:1.2rem;">
         <span class="proj-tag"><a href="fluke.pdf">Documentation</a></span>
       </div>
     </div>
-  
+
     <div class="proj-card pink-bg reveal">
       <div class="proj-num">03</div>
-      <div class="proj-title">Creation Serveur sur vSphere et VLAN </div>
-      <p class="proj-desc">Mise en place d’un serveur HAProxy pour répartir le trafic entre plusieurs serveurs web et garantir la haute disponibilité des services réseau de l’entreprise.</p>
-      <div class="proj-stack">
+      <div class="proj-title">Création Serveur vSphere &amp; VLAN</div>
+      <p class="proj-desc">Déploiement d'une VM sur vSphere et configuration de VLANs pour segmenter le réseau hospitalier.</p>
+      <div class="proj-gallery">
+        <div class="proj-gallery-item placeholder">Photo 1</div>
+        <div class="proj-gallery-item placeholder">Photo 2</div>
+        <div class="proj-gallery-item placeholder">Photo 3</div>
+      </div>
+      <div class="proj-stack" style="margin-top:1.2rem;">
         <span class="proj-tag"><a href="vsphere.pdf">Documentation</a></span>
       </div>
     </div>
 
-      <div class="proj-card pink-bg reveal">
+    <div class="proj-card reveal">
       <div class="proj-num">04</div>
       <div class="proj-title">Borne Wifi</div>
-      <p class="proj-desc">Mise en place d’un serveur HAProxy pour répartir le trafic entre plusieurs serveurs web et garantir la haute disponibilité des services réseau de l’entreprise.</p>
-      <div class="proj-stack">
+      <p class="proj-desc">Installation et configuration de bornes Wi-Fi dans les services hospitaliers, paramétrage des SSIDs et sécurisation du réseau sans fil.</p>
+      <div class="proj-gallery">
+        <div class="proj-gallery-item placeholder">Photo 1</div>
+        <div class="proj-gallery-item placeholder">Photo 2</div>
+        <div class="proj-gallery-item placeholder">Photo 3</div>
+      </div>
+      <div class="proj-stack" style="margin-top:1.2rem;">
         <span class="proj-tag"><a href="borne.pdf">Documentation</a></span>
       </div>
     </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-left">
+    <div class="section-tag reveal">05 — Contact</div>
+    <h2 class="reveal">Travaillons<br><em>ensemble</em></h2>
+    <p class="reveal">Disponible pour une alternance en administration réseaux &amp; systèmes dans la région lyonnaise à partir de septembre 2026.</p>
+    <div class="contact-links reveal">
+      <a href="mailto:sara.abdeen@example.com" class="contact-link">✉ sara.abdeen@example.com</a>
+      <a href="https://linkedin.com/in/sara-abdeen" class="contact-link" target="_blank">🔗 LinkedIn</a>
+      <a href="https://github.com/sra3be" class="contact-link" target="_blank">⌥ GitHub</a>
+    </div>
+  </div>
+  <div class="contact-right reveal">
+    <form class="contact-form" onsubmit="return false;">
+      <div class="form-row">
+        <div class="field">
+          <label for="nom">Nom</label>
+          <input type="text" id="nom" placeholder="Votre nom">
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="votre@email.com">
+        </div>
+      </div>
+      <div class="field">
+        <label for="sujet">Sujet</label>
+        <input type="text" id="sujet" placeholder="Proposition d'alternance...">
+      </div>
+      <div class="field">
+        <label for="msg">Message</label>
+        <textarea id="msg" rows="5" placeholder="Votre message..."></textarea>
+      </div>
+      <button class="btn-send" type="submit">Envoyer →</button>
+    </form>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo">Sara</div>
@@ -956,26 +1149,45 @@ footer {
 </footer>
 
 <script>
-// Cursor
+// ── Cursor ──
 const cur = document.getElementById('cur');
 document.addEventListener('mousemove', e => {
   cur.style.left = e.clientX - 6 + 'px';
   cur.style.top  = e.clientY - 6 + 'px';
 });
-document.querySelectorAll('a, button, .skill-row, .exp-card, .proj-card, .info-pill').forEach(el => {
+document.querySelectorAll('a, button, .skill-row, .exp-card, .proj-card, .info-pill, .proj-gallery-item').forEach(el => {
   el.addEventListener('mouseenter', () => cur.classList.add('big'));
   el.addEventListener('mouseleave', () => cur.classList.remove('big'));
 });
 
-// Scroll reveal
+// ── Scroll reveal ──
 const obs = new IntersectionObserver(entries => {
   entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('visible'), i * 80);
-    }
+    if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
   });
 }, { threshold: 0.12 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// ── Lightbox ──
+const lb    = document.getElementById('lightbox');
+const lbImg = document.getElementById('lb-img');
+const lbCap = document.getElementById('lb-caption');
+
+function lbOpen(src, caption) {
+  lbImg.src = src;
+  lbCap.textContent = caption || '';
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function lbCloseAll() {
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+  setTimeout(() => { lbImg.src = ''; }, 300);
+}
+function lbClose(e) {
+  if (e.target === lb) lbCloseAll();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') lbCloseAll(); });
 </script>
 </body>
 </html>
