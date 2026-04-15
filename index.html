@@ -741,6 +741,74 @@ footer {
 </style>
 </head>
 <body>
+/* ─── VEILLE TECHNO ─── */
+.vt-filter {
+  font-size: 0.72rem;
+  padding: 0.4rem 1rem;
+  border-radius: 100px;
+  border: 1px solid var(--warm2);
+  background: white;
+  color: var(--ink2);
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.vt-filter:hover { border-color: var(--rose-deep); color: var(--rose-dark); }
+.vt-filter.active { background: var(--ink); color: var(--rose); border-color: var(--ink); }
+
+.vt-article {
+  background: var(--cream2);
+  border: 1px solid var(--warm2);
+  border-radius: 8px;
+  padding: 1.8rem;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+.vt-article:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(169,63,92,0.1); border-color: var(--rose); }
+.vt-source-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+}
+.vt-article-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.35;
+}
+.vt-article-desc {
+  font-size: 0.82rem;
+  color: var(--ink2);
+  line-height: 1.65;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.vt-meta {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--warm2);
+  flex-wrap: wrap;
+}
+.vt-date { font-size: 0.68rem; color: var(--warm); letter-spacing: 0.05em; }
+.vt-tag {
+  font-size: 0.6rem;
+  padding: 0.2rem 0.6rem;
+  background: var(--rose);
+  color: var(--rose-dark);
+  border-radius: 100px;
+  letter-spacing: 0.03em;
+}
 
 <div class="cur" id="cur"></div>
 
@@ -1019,10 +1087,11 @@ footer {
     <div class="proj-card reveal">
       <div class="proj-num">04</div>
       <div class="proj-title">Administration Windows Server</div>
-      <p class="proj-desc">Lab d'administration en VM : gestion AD, GPO, utilisateurs, optimisation disque et sécurité.</p>
+      <p class="proj-desc">Développement d'un forum web complet pour les étudiants et enseignants du BTS SIO : inscription, authentification, gestion des rôles (admin / modérateur / utilisateur), articles et commentaires, panneau d'administration.</p>
       <div class="proj-gallery">
         <div class="proj-gallery-item placeholder">Photo 1</div>
         <div class="proj-gallery-item placeholder">Photo 2</div>
+        <div class="proj-gallery-item placeholder">Photo 3</div>
         <div class="proj-gallery-item placeholder">Photo 3</div>
       </div>
       <div class="proj-stack" style="margin-top:0.8rem;">
@@ -1050,11 +1119,8 @@ footer {
       <div class="proj-num">01</div>
       <div class="proj-title">Support Informatique</div>
       <p class="proj-desc">Gestion des tickets, support utilisateurs N1/N2/N3, déploiement de postes et résolution d'incidents en environnement hospitalier.</p>
-      <div class="proj-gallery">
-        <div class="proj-gallery-item placeholder">Photo 1</div>
-        <div class="proj-gallery-item placeholder">Photo 2</div>
-        <div class="proj-gallery-item placeholder">Photo 3</div>
-      </div>
+  
+
       <div class="proj-stack" style="margin-top:1.2rem;">
         <span class="proj-tag"><a href="support.pdf">Documentation</a></span>
       </div>
@@ -1064,11 +1130,6 @@ footer {
       <div class="proj-num">02</div>
       <div class="proj-title">Test Fluke</div>
       <p class="proj-desc">Tests de câblage réseau avec l'outil Fluke, vérification des prises RJ45 et certification des installations réseau du CHWM.</p>
-      <div class="proj-gallery">
-        <div class="proj-gallery-item placeholder">Photo 1</div>
-        <div class="proj-gallery-item placeholder">Photo 2</div>
-        <div class="proj-gallery-item placeholder">Photo 3</div>
-      </div>
       <div class="proj-stack" style="margin-top:1.2rem;">
         <span class="proj-tag"><a href="fluke.pdf">Documentation</a></span>
       </div>
@@ -1078,11 +1139,6 @@ footer {
       <div class="proj-num">03</div>
       <div class="proj-title">Création Serveur vSphere &amp; VLAN</div>
       <p class="proj-desc">Déploiement d'une VM sur vSphere et configuration de VLANs pour segmenter le réseau hospitalier.</p>
-      <div class="proj-gallery">
-        <div class="proj-gallery-item placeholder">Photo 1</div>
-        <div class="proj-gallery-item placeholder">Photo 2</div>
-        <div class="proj-gallery-item placeholder">Photo 3</div>
-      </div>
       <div class="proj-stack" style="margin-top:1.2rem;">
         <span class="proj-tag"><a href="vsphere.pdf">Documentation</a></span>
       </div>
@@ -1092,11 +1148,6 @@ footer {
       <div class="proj-num">04</div>
       <div class="proj-title">Borne Wifi</div>
       <p class="proj-desc">Installation et configuration de bornes Wi-Fi dans les services hospitaliers, paramétrage des SSIDs et sécurisation du réseau sans fil.</p>
-      <div class="proj-gallery">
-        <div class="proj-gallery-item placeholder">Photo 1</div>
-        <div class="proj-gallery-item placeholder">Photo 2</div>
-        <div class="proj-gallery-item placeholder">Photo 3</div>
-      </div>
       <div class="proj-stack" style="margin-top:1.2rem;">
         <span class="proj-tag"><a href="borne.pdf">Documentation</a></span>
       </div>
@@ -1105,40 +1156,35 @@ footer {
   </div>
 </section>
 
-<!-- CONTACT -->
-<section id="contact">
-  <div class="contact-left">
-    <div class="section-tag reveal">05 — Contact</div>
-    <h2 class="reveal">Travaillons<br><em>ensemble</em></h2>
-    <p class="reveal">Disponible pour une alternance en administration réseaux &amp; systèmes dans la région lyonnaise à partir de septembre 2026.</p>
-    <div class="contact-links reveal">
-      <a href="mailto:sara.abdeen@example.com" class="contact-link">✉ sara.abdeen@example.com</a>
-      <a href="https://linkedin.com/in/sara-abdeen" class="contact-link" target="_blank">🔗 LinkedIn</a>
-      <a href="https://github.com/sra3be" class="contact-link" target="_blank">⌥ GitHub</a>
+<!-- VEILLE TECHNOLOGIQUE -->
+<section id="veille" style="padding: 6rem 5rem; background: var(--cream);">
+  <div class="proj-header">
+    <div>
+      <div class="section-tag reveal">05 — Veille</div>
+      <h2 class="reveal">Veille <em>Cybersécurité</em></h2>
     </div>
+    <p class="reveal">Actualités sécurité chargées en direct depuis des sources de référence. Mise à jour automatique à chaque visite.</p>
   </div>
-  <div class="contact-right reveal">
-    <form class="contact-form" onsubmit="return false;">
-      <div class="form-row">
-        <div class="field">
-          <label for="nom">Nom</label>
-          <input type="text" id="nom" placeholder="Votre nom">
-        </div>
-        <div class="field">
-          <label for="email">Email</label>
-          <input type="email" id="email" placeholder="votre@email.com">
-        </div>
-      </div>
-      <div class="field">
-        <label for="sujet">Sujet</label>
-        <input type="text" id="sujet" placeholder="Proposition d'alternance...">
-      </div>
-      <div class="field">
-        <label for="msg">Message</label>
-        <textarea id="msg" rows="5" placeholder="Votre message..."></textarea>
-      </div>
-      <button class="btn-send" type="submit">Envoyer →</button>
-    </form>
+
+  <!-- Filtres -->
+  <div class="reveal" style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:2rem;">
+    <button class="vt-filter active" data-src="all" onclick="filterFeed('all',this)">Toutes les sources</button>
+    <button class="vt-filter" data-src="thehackernews" onclick="filterFeed('thehackernews',this)">The Hacker News</button>
+    <button class="vt-filter" data-src="krebs" onclick="filterFeed('krebs',this)">Krebs on Security</button>
+    <button class="vt-filter" data-src="certfr" onclick="filterFeed('certfr',this)">CERT-FR</button>
+  </div>
+
+  <!-- Feed -->
+  <div id="vt-feed" class="stages-grid reveal"></div>
+
+  <!-- Loader -->
+  <div id="vt-loader" style="text-align:center; padding:3rem; color:var(--warm); font-size:0.85rem; letter-spacing:0.1em;">Chargement des articles…</div>
+
+  <!-- Liens contact en bas -->
+  <div class="reveal" style="margin-top:4rem; padding-top:2rem; border-top:1px solid var(--warm2); display:flex; gap:1rem; flex-wrap:wrap; align-items:center; justify-content:center;">
+    <a href="mailto:sara.abdeen@example.com" class="contact-link" style="justify-content:center;">✉ sara.abdeen@example.com</a>
+    <a href="https://www.linkedin.com/in/sara-abdeen-4815a83b4/" class="contact-link" target="_blank" style="justify-content:center;">🔗 LinkedIn</a>
+    <a href="https://github.com/sra3be" class="contact-link" target="_blank" style="justify-content:center;">⌥ GitHub</a>
   </div>
 </section>
 
@@ -1147,7 +1193,6 @@ footer {
   <div class="footer-logo">Sara</div>
   <div class="footer-info">BTS SIO SISR · Chalon-sur-Saône · 2026</div>
 </footer>
-
 <script>
 // ── Cursor ──
 const cur = document.getElementById('cur');
@@ -1188,6 +1233,104 @@ function lbClose(e) {
   if (e.target === lb) lbCloseAll();
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') lbCloseAll(); });
+</script>
+  <script>
+// ── Veille Technologique ──
+const RSS_API = 'https://api.rss2json.com/v1/api.json?rss_url=';
+const SOURCES = [
+  {
+    id: 'thehackernews',
+    name: 'The Hacker News',
+    url: 'https://feeds.feedburner.com/TheHackersNews',
+    tag: 'Cybersécurité'
+  },
+  {
+    id: 'krebs',
+    name: 'Krebs on Security',
+    url: 'https://krebsonsecurity.com/feed/',
+    tag: 'Sécurité'
+  },
+  {
+    id: 'certfr',
+    name: 'CERT-FR',
+    url: 'https://www.cert.ssi.gouv.fr/feed/',
+    tag: 'Alerte FR'
+  }
+];
+
+let allArticles = [];
+let activeFilter = 'all';
+
+function relativeTime(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const h = Math.floor(diff / 3600000);
+  const d = Math.floor(diff / 86400000);
+  if (h < 1) return 'il y a moins d\'1h';
+  if (h < 24) return `il y a ${h}h`;
+  return `il y a ${d} jour${d > 1 ? 's' : ''}`;
+}
+
+function stripHtml(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+}
+
+function renderFeed(articles) {
+  const feed = document.getElementById('vt-feed');
+  if (!articles.length) {
+    feed.innerHTML = '<p style="color:var(--warm);font-size:0.85rem;padding:2rem 0;">Aucun article trouvé.</p>';
+    return;
+  }
+  feed.innerHTML = articles.slice(0, 8).map(a => `
+    <a class="vt-article" href="${a.link}" target="_blank" rel="noopener">
+      <div class="vt-source-label">${a.source}</div>
+      <div class="vt-article-title">${a.title}</div>
+      <div class="vt-article-desc">${stripHtml(a.description).substring(0, 200)}…</div>
+      <div class="vt-meta">
+        <span class="vt-date">${relativeTime(a.pubDate)}</span>
+        <span class="vt-tag">${a.tag}</span>
+      </div>
+    </a>
+  `).join('');
+}
+
+function filterFeed(src, btn) {
+  activeFilter = src;
+  document.querySelectorAll('.vt-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = src === 'all' ? allArticles : allArticles.filter(a => a.sourceId === src);
+  renderFeed(filtered);
+}
+
+async function loadFeed() {
+  const loader = document.getElementById('vt-loader');
+  try {
+    const results = await Promise.allSettled(
+      SOURCES.map(s =>
+        fetch(`${RSS_API}${encodeURIComponent(s.url)}&count=10`)
+          .then(r => r.json())
+          .then(data => (data.items || []).map(item => ({
+            ...item,
+            source: s.name,
+            sourceId: s.id,
+            tag: s.tag
+          })))
+      )
+    );
+    allArticles = results
+      .filter(r => r.status === 'fulfilled')
+      .flatMap(r => r.value)
+      .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+    loader.style.display = 'none';
+    renderFeed(allArticles);
+  } catch(e) {
+    loader.textContent = 'Impossible de charger les flux. Vérifie ta connexion.';
+  }
+}
+
+loadFeed();
 </script>
 </body>
 </html>
